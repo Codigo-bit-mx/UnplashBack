@@ -1,35 +1,33 @@
-const { response, request } = require('express');
-const multer = require('multer');
+
+const path = require('path');
 const shortid = require('shortid');
-const fs = require('fs'); 
 
+const subirArchivo = (files, extensionValidas = ['jpg', 'png', 'gif', 'jpeg']) => {
+    return new Promise ((resolve, reject) => {
 
-const imgPOST = async(req, res, next) => {
- 
-    const configuracionMulter = {
-       limit: 1204,
-       storage: fileStorage = multer.diskStorage({
-           destination: (req, file, cb) => {
-               cb(null, __dirname+'/../uploads');
-           },
-        filename: (req, file, cb) => {
-            const extension = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
-            cb(null, `${shortid.generate()}${extension}`);
+        const { archivo } = files;
+        const nombreCortado = archivo.name.split('.');
+        const extension = nombreCortado[ nombreCortado.length -1 ];
+        
+        //validar extension 
+        if(!extensionValidas.includes(extension)){
+            reject(`La extension ${extension} no es permitida`);
         }
-       })
-    }
-
-    const upload = multer(configuracionMulter).single('archivo');
-    upload(req, res, async (error) => {
-        if(!error){
-            res.json({archivo: req.file.filename});
-        }else {
-            console.log(error);
-            return next();
-        }
+        
+        const nombreTemp = shortid.generate() + '.' + extension;
+        const uploadPath = path.join( __dirname, '../uploads/', nombreTemp );
+      
+      console.log(uploadPath);
+        archivo.mv(uploadPath, (err) => {
+            if(err){
+               return reject(err)
+            }
+            resolve(nombreTemp);
+        });
     })
 }
 
+
 module.exports = {
-    imgPOST
+    subirArchivo
 }
