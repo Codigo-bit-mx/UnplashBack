@@ -5,15 +5,26 @@ const { nuevaImgCar, imgAll, eliminarIMG, imgCategoria } = require('../controlle
 const router = Router();
 
 router.get('/', imgAll);
-router.get('/:categoria', imgCategoria)
+router.get('/:categoria',
+    [
+       check('categoria', 'No se incorporo la categoria').not(),isEmpty()
+    ],
+imgCategoria);
+
 router.post('/', 
-// [
-//     check('nombre', 'Sube un archivo' ).not().isEmpty()
-// ],
-    nuevaImgCar
+    [
+        check('nombre', 'No se incorporo un nombre' ).not().isEmpty(),
+        check('titulo', 'Ingresa un titulo').not().isEmpty(),
+        check('categoria', 'Ingresa una categoria').not().isEmpty()
+    ],
+nuevaImgCar
 );
 
-router.put('/:id', eliminarIMG);
+router.put('/:id',
+    [
+        check('id','El id no es valido para mongo').isMongoId()
+    ],
+eliminarIMG);
 
 
 
