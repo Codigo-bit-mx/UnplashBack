@@ -15,14 +15,17 @@ const subirArchivo = (files, extensionValidas = ['jpg', 'png', 'gif', 'jpeg']) =
         }
         
         const nombreTemp = shortid.generate() + '.' + extension;
-        const uploadPath = path.join( __dirname, '../uploads/', nombreTemp );
+        const uploadPath = path.join( __dirname, '../public/uploads/', nombreTemp );
       
-      console.log(uploadPath);
+        console.log(uploadPath);
         archivo.mv(uploadPath, (err) => {
             if(err){
                return reject(err)
             }
-            resolve(nombreTemp);
+            resolve({
+                archivo: nombreTemp,
+                ruta: process.env.BACK_END_PRO_ARCHIVOS +`upload/${nombreTemp}`
+            });
         });
     })
 }
