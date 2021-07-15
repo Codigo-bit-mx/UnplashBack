@@ -7,7 +7,7 @@ const router = Router();
 router.get('/', imgAll);
 router.get('/:categoria',
     [
-       check('categoria', 'No se incorporo la categoria').not(),isEmpty()
+       check('categoria', 'No se incorporo la categoria').not().isEmpty()
     ],
 imgCategoria);
 

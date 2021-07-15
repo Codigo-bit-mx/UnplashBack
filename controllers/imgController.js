@@ -1,6 +1,8 @@
 const { response, request } = require('express');
 const multer = require('multer');
 const shortid = require('shortid');
+const cloudinary = require('cloudinary').v2;
+cloudinary.config(process.env.CLOUDINARY_URL);
 const fs = require('fs'); 
 const path = require('path');
 
@@ -34,17 +36,8 @@ const imgPOST = async(req, res, next) => {
     })
 }
 
-const imgDELETE = (req, res) => {
-    console.log(req.archivo);
-    try{
-        fs.inlinkSync(__dirname + `/../uploads/${req.archivo}`);
-        console.log('archivo eliminado');
-    }catch(err){
-        console.log(err);
-    }
-}
 
 module.exports = {
-    imgPOST,
-    imgDELETE
+    imgPOST
+    
 } 
