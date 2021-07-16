@@ -21,7 +21,7 @@ const imgPOST = async(req, res = response) => {
         console.log("hasta aqui llego jaja");
         const uploadPath = path.join( __dirname, '../public/uploads/', nombreTemp );
         archivo.mv(uploadPath);
-            console.log(" ya no paso ");
+            console.log(uploadPath);
         const {secure_url} = await cloudinary.uploader.upload(uploadPath); 
            
         res.json({
