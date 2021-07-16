@@ -30,7 +30,9 @@ const imgPOST = async(req, res = response) => {
         
 
      }catch (error){
-        console.log(error);
+        res.status(500).json({
+            msg: "error en el servidor "
+        })
      }
 
 }
