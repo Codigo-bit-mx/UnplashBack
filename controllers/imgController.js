@@ -1,6 +1,4 @@
 const { response, request } = require('express');
-// const {subirArchivo} = require('../helpers/subir-archivo');
-const path = require('path');
 const shortid = require('shortid');
 const cloudinary = require('cloudinary').v2;
 cloudinary.config( process.env.CLOUDINARY_URL);
@@ -18,15 +16,18 @@ const imgPOST = async(req, res = response) => {
             }
 
         const nombreTemp = shortid.generate() + '.' + extension;
-        console.log("hasta aqui llego jaja");
-        const uploadPath = path.join( __dirname, '/public/uploads/', nombreTemp );
-        archivo.mv(uploadPath);
-        console.log(uploadPath);
-        const {secure_url} = await cloudinary.uploader.upload(uploadPath); 
+
+        //carga en modo local
+        // const uploadPath = path.join( __dirname, '../public/uploads/', nombreTemp );
+        // archivo.mv(uploadPath); ->>> cambia upload por tempFilePath en modo local
+        // console.log(uploadPath);
+
+        //carga en modo produccion 
+        const {secure_url} = await cloudinary.uploader.upload(archivo.tempFilePath); 
            
         res.status(200).json({
                 archivo: nombreTemp,
-                rutaLocal: secure_url 
+                ruta: secure_url 
             });
         
 
@@ -38,7 +39,6 @@ const imgPOST = async(req, res = response) => {
 
 }
     
-
 
 module.exports = {
     imgPOST
