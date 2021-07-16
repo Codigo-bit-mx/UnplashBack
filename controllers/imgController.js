@@ -19,12 +19,12 @@ const imgPOST = async(req, res = response) => {
 
         const nombreTemp = shortid.generate() + '.' + extension;
         console.log("hasta aqui llego jaja");
-        const uploadPath = path.join( __dirname, '../public/uploads/', nombreTemp );
+        const uploadPath = path.join( __dirname, '/public/uploads/', nombreTemp );
         archivo.mv(uploadPath);
         console.log(uploadPath);
-        const {secure_url} = await cloudinary.uploader.upload(archivo.tempFilePath); 
+        const {secure_url} = await cloudinary.uploader.upload(uploadPath); 
            
-        res.json({
+        res.status(200).json({
                 archivo: nombreTemp,
                 rutaLocal: secure_url 
             });
@@ -32,7 +32,7 @@ const imgPOST = async(req, res = response) => {
 
      }catch (error){
         res.status(500).json({
-            msg: "error en el servidor "
+            msg: "Existe un error en el servidor"
         })
      }
 
