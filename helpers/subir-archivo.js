@@ -1,34 +1,35 @@
-
 const path = require('path');
 const shortid = require('shortid');
 
-const subirArchivo = (files, extensionValidas = ['jpg', 'png', 'gif', 'jpeg']) => {
-    return new Promise ((resolve, reject) => {
-
+const subirArchivo = async(req, res, files, extensionValidas = ['jpg', 'png', 'gif', 'jpeg']) => {
+     
+    try {
         const { archivo } = files;
         const nombreCortado = archivo.name.split('.');
         const extension = nombreCortado[ nombreCortado.length -1 ];
-        
-        //validar extension 
-        if(!extensionValidas.includes(extension)){
-            reject(`La extension ${extension} no es permitida`);
-        }
-        
+
+            if(!extensionValidas.includes(extension)){
+                console.log(`La extension ${extension} no es permitida`);
+            }
+
         const nombreTemp = shortid.generate() + '.' + extension;
         const uploadPath = path.join( __dirname, '../public/uploads/', nombreTemp );
-      
-        console.log(uploadPath);
-        archivo.mv(uploadPath, (err) => {
-            if(err){
-               return reject(err)
-            }
-            resolve({
+        archivo.mv(uploadPath);
+            
+        const {secure_url} = await cloudinary.uploader.upload(uploadPath); 
+           
+        res.json({
                 archivo: nombreTemp,
-                ruta: process.env.BACK_END_PRO_ARCHIVOS +`upload/${nombreTemp}`
+                rutaLocal: secure_url 
             });
-        });
-    })
+        
+
+     }catch (error){
+        console.log(error);
+     }
+
 }
+   
 
 
 module.exports = {
