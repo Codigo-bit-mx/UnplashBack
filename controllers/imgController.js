@@ -8,9 +8,9 @@ cloudinary.config( process.env.CLOUDINARY_URL);
 const imgPOST = async(req, res = response) => {
     const extensionValidas = ['jpg', 'jpeg', 'gif', 'png'];
     try {
-        const { name, tempFilePath} = req.files.archivo;
+        const { archivo } = req.files;
         console.log(archivo);
-        const nombreCortado = name.split('.');
+        const nombreCortado = archivo.name.split('.');
         const extension = nombreCortado[ nombreCortado.length -1 ];
        
             if(!extensionValidas.includes(extension)){
@@ -22,7 +22,7 @@ const imgPOST = async(req, res = response) => {
         const uploadPath = path.join( __dirname, '../public/uploads/', nombreTemp );
         archivo.mv(uploadPath);
         console.log(uploadPath);
-        const {secure_url} = await cloudinary.uploader.upload(tempFilePath); 
+        const {secure_url} = await cloudinary.uploader.upload(name.tempFilePath); 
            
         res.json({
                 archivo: nombreTemp,
