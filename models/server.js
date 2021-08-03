@@ -43,7 +43,7 @@ class Server {
     }
 
     listen(){
-        this.app.listen( process.env.PORT, () => {
+        this.app.listen(process.env.PORT, '0.0.0.0', () => {
             console.log('Servidor corriendo en el puerto', process.env.PORT);
         })
     }

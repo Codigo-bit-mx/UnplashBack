@@ -34,7 +34,7 @@ const imgAll = async (req, res) => {
         res.status(200).json({datos});
     }catch(error){
         console.log(error)
-        res.status(200).send({msg: 'Esta fallando el endpoint para obtener todas las imgs'});
+        res.status(400).send({msg: 'Esta fallando el endpoint para obtener todas las imgs'});
     }
 }
 
